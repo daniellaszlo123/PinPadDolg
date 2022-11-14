@@ -4,10 +4,14 @@
  */
 package nezet;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +22,7 @@ public class PinPadForm extends javax.swing.JFrame {
     public static final int PIN_GOMBOK_SZAMA=10;
     
     ArrayList<String> alapGomSorrend;
+    JButton[] gombok;
 
     /**
      * Creates new form PinPadForm
@@ -25,7 +30,31 @@ public class PinPadForm extends javax.swing.JFrame {
     public PinPadForm() {
         initComponents();
         gombokAlap();
+        gombok=gombTombKomponensekbol();
         alapGomSorrend=gombokSzovegeListbe();
+        gombokraEsemeny();
+    }
+    
+    private void gombokraEsemeny(){
+        for (JButton gomb : gombok) {
+            gomb.addActionListener(new PinGomListener());
+        }
+    }
+    
+    class PinGomListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton btn = (JButton)e.getSource();
+            
+            btn.setBackground(Color.CYAN);
+            
+            String s=txtKod.getText();
+            s+=btn.getText();
+            
+            txtKod.setText(s);
+        }
+        
     }
     
     private void gombokAlap() {
@@ -106,8 +135,14 @@ public class PinPadForm extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         mnuFugg = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("PinPad");
         setPreferredSize(new java.awt.Dimension(410, 350));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         pnlPinKod.setBorder(javax.swing.BorderFactory.createTitledBorder("Pin kód"));
         pnlPinKod.setLayout(new java.awt.GridLayout(4, 3, 5, 5));
@@ -287,6 +322,11 @@ public class PinPadForm extends javax.swing.JFrame {
         jMenu1.add(jSeparator1);
 
         mnuKilepes.setText("Kilépés");
+        mnuKilepes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuKilepesActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnuKilepes);
 
         jMenuBar1.add(jMenu1);
@@ -332,6 +372,21 @@ public class PinPadForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_checkKeverItemStateChanged
 
+    private void mnuKilepesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuKilepesActionPerformed
+        kilepes();
+    }//GEN-LAST:event_mnuKilepesActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        kilepes();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void kilepes(){
+        int valasz=JOptionPane.showConfirmDialog(rootPane, "Kilépsz?", "Kilépés", JOptionPane.YES_NO_OPTION);
+        
+        if (valasz==JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }
     
     private ArrayList<String> gombokSzovegeListbe(){
         JButton[] btns=gombTombKomponensekbol();
