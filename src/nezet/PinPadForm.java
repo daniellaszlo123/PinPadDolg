@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -21,8 +22,12 @@ public class PinPadForm extends javax.swing.JFrame {
     
     public static final int PIN_GOMBOK_SZAMA=10;
     
-    ArrayList<JButton> alapGomSorrend;
-    JButton[] gombok;
+    private ArrayList<JButton> alapGomSorrend;
+    private JButton[] gombok;
+    private String kezdJel;
+    private int kiJon;
+    private int amobaMeret;
+    
 
     /**
      * Creates new form PinPadForm
@@ -30,26 +35,42 @@ public class PinPadForm extends javax.swing.JFrame {
     public PinPadForm() {
         initComponents();
         ujra();
+        
+    }
+    
+    private void amobaGombokGenaral(){
+        amobaMeret=3;
+        gombokTorol(pnlAmoba);
+        gombokGeneral(pnlAmoba, amobaMeret*amobaMeret);
+    }
+    
+    private void kezdJelBeallit(){
+        kezdJel= rdoX.isSelected() ? "X" : "O";
+        kiJon = kezdJel=="X" ? 0:1;
     }
     
     private void ujra(){
-        pinGombokTorol();
+        gombokTorol(pnlPinKod);
         txtKod.setText("");
-        checkKever.setEnabled(false);
+        checkKever.setSelected(false);
         
-        gombokGeneral();
+        pinGombokGenaral();
         gombokAlap();
         gombok=gombTombKomponensekbol();
         alapGomSorrend=gombokListbe();
         gombokraEsemeny();
     }
     
-    private void gombokGeneral(){
-        JButton[] btns = new JButton[PIN_GOMBOK_SZAMA];
+    private void gombokGeneral(JPanel pnl, int meret){
+        JButton[] btns = new JButton[meret];
         for (JButton btn : btns) {
-            btn= new JButton("");
-            pnlPinKod.add(btn);
+            btn = new JButton("");
+            pnl.add(btn);
         }
+    }
+    
+    private void pinGombokGenaral(){
+        gombokGeneral(pnlPinKod, PIN_GOMBOK_SZAMA);
     }
     
     private void gombokraEsemeny(){
@@ -118,20 +139,11 @@ public class PinPadForm extends javax.swing.JFrame {
         txtKod = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         pnlAmoba = new javax.swing.JPanel();
-        jButton11 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
-        jButton14 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
-        jButton17 = new javax.swing.JButton();
-        jButton18 = new javax.swing.JButton();
-        jButton19 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rdoX = new javax.swing.JRadioButton();
+        rdoO = new javax.swing.JRadioButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnuUjra = new javax.swing.JMenuItem();
@@ -147,6 +159,12 @@ public class PinPadForm extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+        });
+
+        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane1MouseClicked(evt);
             }
         });
 
@@ -209,7 +227,7 @@ public class PinPadForm extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlBeallit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlPinKod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Bejelentkezés", jPanel2);
@@ -220,46 +238,11 @@ public class PinPadForm extends javax.swing.JFrame {
         pnlAmoba.setLayout(pnlAmobaLayout);
         pnlAmobaLayout.setHorizontalGroup(
             pnlAmobaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlAmobaLayout.createSequentialGroup()
-                .addGroup(pnlAmobaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlAmobaLayout.createSequentialGroup()
-                        .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlAmobaLayout.createSequentialGroup()
-                        .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlAmobaLayout.createSequentialGroup()
-                        .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton19, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 16, Short.MAX_VALUE))
+            .addGap(0, 161, Short.MAX_VALUE)
         );
         pnlAmobaLayout.setVerticalGroup(
             pnlAmobaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlAmobaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlAmobaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlAmobaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addGroup(pnlAmobaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton17, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton19, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGap(0, 113, Short.MAX_VALUE)
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Beállítás"));
@@ -277,36 +260,39 @@ public class PinPadForm extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1);
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText("\"X\" kezd");
-        jPanel1.add(jRadioButton1);
+        buttonGroup1.add(rdoX);
+        rdoX.setSelected(true);
+        rdoX.setText("\"X\" kezd");
+        rdoX.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jelBeallit(evt);
+            }
+        });
+        jPanel1.add(rdoX);
 
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("\"O\" kezd");
-        jPanel1.add(jRadioButton2);
+        buttonGroup1.add(rdoO);
+        rdoO.setText("\"O\" kezd");
+        jPanel1.add(rdoO);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(23, 23, 23)
                 .addComponent(pnlAmoba, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(51, 51, 51))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(33, 33, 33)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addComponent(pnlAmoba, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(42, Short.MAX_VALUE))
+                    .addComponent(pnlAmoba, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Játék", jPanel3);
@@ -355,9 +341,7 @@ public class PinPadForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 6, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
         );
 
         pack();
@@ -367,11 +351,11 @@ public class PinPadForm extends javax.swing.JFrame {
         if (checkKever.isSelected()) {
             ArrayList<JButton> keverendoGombok = gombokListbe();
             Collections.shuffle(keverendoGombok);
-            pinGombokTorol();
+            gombokTorol(pnlPinKod);
             pinPadFrissit(keverendoGombok);
             revalidate();
         }else{
-            pinGombokTorol();
+            gombokTorol(pnlPinKod);
             pinPadFrissit(alapGomSorrend);
             revalidate();
         }
@@ -389,8 +373,49 @@ public class PinPadForm extends javax.swing.JFrame {
         ujra();
     }//GEN-LAST:event_mnuUjraActionPerformed
 
-    private void pinGombokTorol(){
-        pnlPinKod.removeAll();
+    private void jelBeallit(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jelBeallit
+        kezdJelBeallit();
+    }//GEN-LAST:event_jelBeallit
+
+    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+        kezdJelBeallit();
+        amobaGombokGenaral();
+        
+    }//GEN-LAST:event_jTabbedPane1MouseClicked
+
+    
+    private void amobaGombokEsemeny(){
+        JButton[] btns = new JButton[amobaMeret*amobaMeret];
+        Component[] comps=pnlAmoba.getComponents();
+        
+        int ind=0;
+        for (Component comp : comps) {
+            if (comp instanceof Component) {
+                btns[ind]=(JButton) comp;
+                ind++;
+            }
+        }
+        
+        for (JButton btn : btns) {
+            btn.addActionListener(new AmobaGombListener());
+        }
+    }
+    
+    class AmobaGombListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton btn = (JButton)e.getSource();
+            
+            String jel= kiJon==0 ? "X":"O";
+            btn.setText(jel);
+            kiJon=1-kiJon;
+        }
+        
+    }
+    
+    private void gombokTorol(JPanel pnl){
+        pnl.removeAll();
     }
     
     private void kilepes(){
@@ -411,7 +436,7 @@ public class PinPadForm extends javax.swing.JFrame {
     }
     
     private void pinPadFrissit(ArrayList<JButton> al){
-        pinGombokTorol();
+        gombokTorol(pnlPinKod);
         for (int i = 0; i < al.size(); i++) {
             pnlPinKod.add(al.get(i));
         }
@@ -449,15 +474,6 @@ public class PinPadForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox checkKever;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton19;
     private javax.swing.JList<String> jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
@@ -465,8 +481,6 @@ public class PinPadForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -478,6 +492,8 @@ public class PinPadForm extends javax.swing.JFrame {
     private javax.swing.JPanel pnlAmoba;
     private javax.swing.JPanel pnlBeallit;
     private javax.swing.JPanel pnlPinKod;
+    private javax.swing.JRadioButton rdoO;
+    private javax.swing.JRadioButton rdoX;
     private javax.swing.JTextField txtKod;
     // End of variables declaration//GEN-END:variables
     
