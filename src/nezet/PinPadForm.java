@@ -6,13 +6,22 @@ package nezet;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.ListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -22,7 +31,7 @@ public class PinPadForm extends javax.swing.JFrame {
     
     public static final int PIN_GOMBOK_SZAMA=10;
     
-    private ArrayList<JButton> alapGomSorrend;
+    private ArrayList<JButton> alapGombSorrend;
     private JButton[] gombok;
     private String kezdJel;
     private int kiJon;
@@ -38,8 +47,8 @@ public class PinPadForm extends javax.swing.JFrame {
         
     }
     
-    private void amobaGombokGenaral(){
-        amobaMeret=3;
+    private void amobaGombokGenaral(int meret){
+        amobaMeret=meret;
         gombokTorol(pnlAmoba);
         gombokGeneral(pnlAmoba, amobaMeret*amobaMeret);
     }
@@ -50,14 +59,14 @@ public class PinPadForm extends javax.swing.JFrame {
     }
     
     private void ujra(){
+        checkKever.setSelected(false);
         gombokTorol(pnlPinKod);
         txtKod.setText("");
-        checkKever.setSelected(false);
         
         pinGombokGenaral();
         gombokAlap();
         gombok=gombTombKomponensekbol();
-        alapGomSorrend=gombokListbe();
+        alapGombSorrend=gombokListbe();
         gombokraEsemeny();
     }
     
@@ -75,11 +84,11 @@ public class PinPadForm extends javax.swing.JFrame {
     
     private void gombokraEsemeny(){
         for (JButton gomb : gombok) {
-            gomb.addActionListener(new PinGomListener());
+            gomb.addActionListener(new PinGombListener());
         }
     }
     
-    class PinGomListener implements ActionListener{
+    class PinGombListener implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -130,18 +139,19 @@ public class PinPadForm extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        mnuGroup = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         pnlPinKod = new javax.swing.JPanel();
-        pnlBeallit = new javax.swing.JPanel();
+        pnlPinBeallit = new javax.swing.JPanel();
         checkKever = new javax.swing.JCheckBox();
         lblKod = new javax.swing.JLabel();
         txtKod = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
+        pnlJatek = new javax.swing.JPanel();
         pnlAmoba = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        pnlAmobaBeallit = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jatekMeretList = new javax.swing.JList<>();
         rdoX = new javax.swing.JRadioButton();
         rdoO = new javax.swing.JRadioButton();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -150,28 +160,27 @@ public class PinPadForm extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuKilepes = new javax.swing.JMenuItem();
         mnuVizszint = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        mnuFugg = new javax.swing.JMenuItem();
+        rdoVizszint = new javax.swing.JRadioButtonMenuItem();
+        rdoFuggoleges = new javax.swing.JRadioButtonMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("PinPad");
-        setPreferredSize(new java.awt.Dimension(410, 350));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
-        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTabbedPane1MouseClicked(evt);
+        jTabbedPane1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTabbedPane1FocusGained(evt);
             }
         });
 
         pnlPinKod.setBorder(javax.swing.BorderFactory.createTitledBorder("Pin kód"));
         pnlPinKod.setLayout(new java.awt.GridLayout(4, 3, 5, 5));
 
-        pnlBeallit.setBorder(javax.swing.BorderFactory.createTitledBorder("Beállítás"));
+        pnlPinBeallit.setBorder(javax.swing.BorderFactory.createTitledBorder("Beállítás"));
 
         checkKever.setText("kever");
         checkKever.addItemListener(new java.awt.event.ItemListener() {
@@ -182,24 +191,24 @@ public class PinPadForm extends javax.swing.JFrame {
 
         lblKod.setText("Kód:");
 
-        javax.swing.GroupLayout pnlBeallitLayout = new javax.swing.GroupLayout(pnlBeallit);
-        pnlBeallit.setLayout(pnlBeallitLayout);
-        pnlBeallitLayout.setHorizontalGroup(
-            pnlBeallitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlBeallitLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlPinBeallitLayout = new javax.swing.GroupLayout(pnlPinBeallit);
+        pnlPinBeallit.setLayout(pnlPinBeallitLayout);
+        pnlPinBeallitLayout.setHorizontalGroup(
+            pnlPinBeallitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlPinBeallitLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addGroup(pnlBeallitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlPinBeallitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(checkKever)
                     .addComponent(lblKod))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(pnlBeallitLayout.createSequentialGroup()
+            .addGroup(pnlPinBeallitLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(txtKod, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        pnlBeallitLayout.setVerticalGroup(
-            pnlBeallitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlBeallitLayout.createSequentialGroup()
+        pnlPinBeallitLayout.setVerticalGroup(
+            pnlPinBeallitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlPinBeallitLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(checkKever)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -216,8 +225,8 @@ public class PinPadForm extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnlPinKod, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                .addComponent(pnlBeallit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addComponent(pnlPinBeallit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(42, 42, 42))
         );
         jPanel2Layout.setVerticalGroup(
@@ -225,40 +234,32 @@ public class PinPadForm extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(47, 47, 47)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlBeallit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlPinBeallit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlPinKod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Bejelentkezés", jPanel2);
 
         pnlAmoba.setBorder(javax.swing.BorderFactory.createTitledBorder("Amőba"));
+        pnlAmoba.setLayout(new java.awt.GridLayout(3, 3, 5, 5));
 
-        javax.swing.GroupLayout pnlAmobaLayout = new javax.swing.GroupLayout(pnlAmoba);
-        pnlAmoba.setLayout(pnlAmobaLayout);
-        pnlAmobaLayout.setHorizontalGroup(
-            pnlAmobaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 161, Short.MAX_VALUE)
-        );
-        pnlAmobaLayout.setVerticalGroup(
-            pnlAmobaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 113, Short.MAX_VALUE)
-        );
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Beállítás"));
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.Y_AXIS));
+        pnlAmobaBeallit.setBorder(javax.swing.BorderFactory.createTitledBorder("Beállítás"));
+        pnlAmobaBeallit.setToolTipText("");
+        pnlAmobaBeallit.setLayout(new javax.swing.BoxLayout(pnlAmobaBeallit, javax.swing.BoxLayout.Y_AXIS));
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(30, 70));
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        jatekMeretList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "3*3", "4*4", "5*5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jList1.setPreferredSize(new java.awt.Dimension(80, 30));
-        jScrollPane1.setViewportView(jList1);
+        jatekMeretList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jatekMeretList.setPreferredSize(new java.awt.Dimension(80, 30));
+        jScrollPane1.setViewportView(jatekMeretList);
 
-        jPanel1.add(jScrollPane1);
+        pnlAmobaBeallit.add(jScrollPane1);
 
         buttonGroup1.add(rdoX);
         rdoX.setSelected(true);
@@ -268,34 +269,34 @@ public class PinPadForm extends javax.swing.JFrame {
                 jelBeallit(evt);
             }
         });
-        jPanel1.add(rdoX);
+        pnlAmobaBeallit.add(rdoX);
 
         buttonGroup1.add(rdoO);
         rdoO.setText("\"O\" kezd");
-        jPanel1.add(rdoO);
+        pnlAmobaBeallit.add(rdoO);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlJatekLayout = new javax.swing.GroupLayout(pnlJatek);
+        pnlJatek.setLayout(pnlJatekLayout);
+        pnlJatekLayout.setHorizontalGroup(
+            pnlJatekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlJatekLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addComponent(pnlAmoba, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51))
+                .addComponent(pnlAmoba, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addComponent(pnlAmobaBeallit, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        pnlJatekLayout.setVerticalGroup(
+            pnlJatekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlJatekLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlAmoba, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addGroup(pnlJatekLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlAmoba, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlAmobaBeallit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Játék", jPanel3);
+        jTabbedPane1.addTab("Játék", pnlJatek);
 
         jMenu1.setText("Program");
 
@@ -320,11 +321,19 @@ public class PinPadForm extends javax.swing.JFrame {
 
         mnuVizszint.setText("Játék elrendezése");
 
-        jMenuItem3.setText("vízszintes");
-        mnuVizszint.add(jMenuItem3);
+        mnuGroup.add(rdoVizszint);
+        rdoVizszint.setSelected(true);
+        rdoVizszint.setText("vízszintes");
+        rdoVizszint.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                elrendVizszintVagyFuggoleges(evt);
+            }
+        });
+        mnuVizszint.add(rdoVizszint);
 
-        mnuFugg.setText("függőleges");
-        mnuVizszint.add(mnuFugg);
+        mnuGroup.add(rdoFuggoleges);
+        rdoFuggoleges.setText("függőleges");
+        mnuVizszint.add(rdoFuggoleges);
 
         jMenuBar1.add(mnuVizszint);
 
@@ -341,7 +350,10 @@ public class PinPadForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -356,7 +368,7 @@ public class PinPadForm extends javax.swing.JFrame {
             revalidate();
         }else{
             gombokTorol(pnlPinKod);
-            pinPadFrissit(alapGomSorrend);
+            pinPadFrissit(alapGombSorrend);
             revalidate();
         }
     }//GEN-LAST:event_checkKeverItemStateChanged
@@ -377,12 +389,66 @@ public class PinPadForm extends javax.swing.JFrame {
         kezdJelBeallit();
     }//GEN-LAST:event_jelBeallit
 
-    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        kezdJelBeallit();
-        amobaGombokGenaral();
-        
-    }//GEN-LAST:event_jTabbedPane1MouseClicked
+    class ListaValasztasListener implements ListSelectionListener{
 
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            int valasztott=jatekMeretList.getSelectedIndex();
+            ListModel<String> meretLista=jatekMeretList.getModel();
+
+            char szam=meretLista.getElementAt(valasztott).charAt(0);
+            amobaMeret=Integer.parseInt(Character.toString(szam));
+
+            pnlAmoba.removeAll();
+            amobaGombokGenaral(amobaMeret);
+            revalidate();
+            amobaGombokEsemeny();
+            
+            pnlAmoba.setLayout(new GridLayout(amobaMeret, amobaMeret, 5, 5));
+            revalidate();
+        }
+        
+    }
+    
+    private void elrendVizszintVagyFuggoleges(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_elrendVizszintVagyFuggoleges
+        // TODO add your handling code here:
+    }//GEN-LAST:event_elrendVizszintVagyFuggoleges
+
+    private void jTabbedPane1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabbedPane1FocusGained
+        rdoVizszint.addItemListener(new ElrendListener());
+        kezdJelBeallit();
+        amobaGombokGenaral(3);
+        amobaGombokEsemeny();
+        jatekMeretList.addListSelectionListener(new ListaValasztasListener());
+        revalidate();
+    }//GEN-LAST:event_jTabbedPane1FocusGained
+    
+    class ElrendListener implements ItemListener{
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            elrendVizszintVagyFuggoleges();
+        }
+        
+    }
+    
+    private void elrendVizszintVagyFuggoleges(){
+        int hely;
+        LayoutManager lmPnl;
+        if (rdoVizszint.isSelected()) {
+            hely=BoxLayout.Y_AXIS;
+            lmPnl = new FlowLayout();
+            
+        }else{
+            lmPnl=new BoxLayout(pnlJatek, BoxLayout.Y_AXIS);
+            hely=BoxLayout.X_AXIS;
+        }
+        LayoutManager lm = new BoxLayout(pnlAmobaBeallit, hely);
+        pnlAmobaBeallit.setLayout(lm);
+        pnlJatek.setLayout(lmPnl);
+        
+        revalidate();
+    }
     
     private void amobaGombokEsemeny(){
         JButton[] btns = new JButton[amobaMeret*amobaMeret];
@@ -474,25 +540,26 @@ public class PinPadForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox checkKever;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JList<String> jatekMeretList;
     private javax.swing.JLabel lblKod;
-    private javax.swing.JMenuItem mnuFugg;
+    private javax.swing.ButtonGroup mnuGroup;
     private javax.swing.JMenuItem mnuKilepes;
     private javax.swing.JMenuItem mnuUjra;
     private javax.swing.JMenu mnuVizszint;
     private javax.swing.JPanel pnlAmoba;
-    private javax.swing.JPanel pnlBeallit;
+    private javax.swing.JPanel pnlAmobaBeallit;
+    private javax.swing.JPanel pnlJatek;
+    private javax.swing.JPanel pnlPinBeallit;
     private javax.swing.JPanel pnlPinKod;
+    private javax.swing.JRadioButtonMenuItem rdoFuggoleges;
     private javax.swing.JRadioButton rdoO;
+    private javax.swing.JRadioButtonMenuItem rdoVizszint;
     private javax.swing.JRadioButton rdoX;
     private javax.swing.JTextField txtKod;
     // End of variables declaration//GEN-END:variables
