@@ -5,6 +5,8 @@
 package nezet;
 
 import java.awt.Component;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JButton;
 
 /**
@@ -14,6 +16,8 @@ import javax.swing.JButton;
 public class PinPadForm extends javax.swing.JFrame {
     
     public static final int PIN_GOMBOK_SZAMA=10;
+    
+    ArrayList<String> alapGomSorrend;
 
     /**
      * Creates new form PinPadForm
@@ -21,6 +25,7 @@ public class PinPadForm extends javax.swing.JFrame {
     public PinPadForm() {
         initComponents();
         gombokAlap();
+        alapGomSorrend=gombokSzovegeListbe();
     }
     
     private void gombokAlap() {
@@ -120,6 +125,11 @@ public class PinPadForm extends javax.swing.JFrame {
         pnlBeallit.setBorder(javax.swing.BorderFactory.createTitledBorder("Beállítás"));
 
         checkKever.setText("kever");
+        checkKever.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                checkKeverItemStateChanged(evt);
+            }
+        });
 
         lblKod.setText("Kód:");
 
@@ -312,6 +322,34 @@ public class PinPadForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void checkKeverItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkKeverItemStateChanged
+        if (checkKever.isSelected()) {
+            ArrayList<String> keverendoGombok = gombokSzovegeListbe();
+            Collections.shuffle(keverendoGombok);
+            pinPadFrissit(keverendoGombok);
+        }else{
+            pinPadFrissit(alapGomSorrend);
+        }
+    }//GEN-LAST:event_checkKeverItemStateChanged
+
+    
+    private ArrayList<String> gombokSzovegeListbe(){
+        JButton[] btns=gombTombKomponensekbol();
+        ArrayList<String> gombok = new ArrayList<String>();
+        for (int i = 0; i < btns.length; i++) {
+            gombok.add(btns[i].getText());
+        }
+        return gombok;
+    }
+    
+    private void pinPadFrissit(ArrayList<String> al){
+        JButton[] btns=gombTombKomponensekbol();
+        int ind=0;
+        for (JButton btn : btns) {
+            btn.setText(al.get(ind));
+            ind++;
+        }
+    }
     /**
      * @param args the command line arguments
      */
