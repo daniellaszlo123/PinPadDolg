@@ -21,7 +21,7 @@ public class PinPadForm extends javax.swing.JFrame {
     
     public static final int PIN_GOMBOK_SZAMA=10;
     
-    ArrayList<String> alapGomSorrend;
+    ArrayList<JButton> alapGomSorrend;
     JButton[] gombok;
 
     /**
@@ -29,10 +29,20 @@ public class PinPadForm extends javax.swing.JFrame {
      */
     public PinPadForm() {
         initComponents();
+        gombokGeneral();
         gombokAlap();
         gombok=gombTombKomponensekbol();
-        alapGomSorrend=gombokSzovegeListbe();
+        alapGomSorrend=gombokListbe();
         gombokraEsemeny();
+    }
+    
+    private void gombokGeneral(){
+        JButton[] btns = new JButton[PIN_GOMBOK_SZAMA];
+        
+        for (JButton btn : btns) {
+            btn= new JButton("");
+            pnlPinKod.add(btn);
+        }
     }
     
     private void gombokraEsemeny(){
@@ -96,16 +106,6 @@ public class PinPadForm extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         pnlPinKod = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
         pnlBeallit = new javax.swing.JPanel();
         checkKever = new javax.swing.JCheckBox();
         lblKod = new javax.swing.JLabel();
@@ -146,16 +146,6 @@ public class PinPadForm extends javax.swing.JFrame {
 
         pnlPinKod.setBorder(javax.swing.BorderFactory.createTitledBorder("Pin kód"));
         pnlPinKod.setLayout(new java.awt.GridLayout(4, 3, 5, 5));
-        pnlPinKod.add(jButton1);
-        pnlPinKod.add(jButton2);
-        pnlPinKod.add(jButton3);
-        pnlPinKod.add(jButton4);
-        pnlPinKod.add(jButton5);
-        pnlPinKod.add(jButton6);
-        pnlPinKod.add(jButton7);
-        pnlPinKod.add(jButton8);
-        pnlPinKod.add(jButton9);
-        pnlPinKod.add(jButton10);
 
         pnlBeallit.setBorder(javax.swing.BorderFactory.createTitledBorder("Beállítás"));
 
@@ -364,11 +354,15 @@ public class PinPadForm extends javax.swing.JFrame {
 
     private void checkKeverItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkKeverItemStateChanged
         if (checkKever.isSelected()) {
-            ArrayList<String> keverendoGombok = gombokSzovegeListbe();
+            ArrayList<JButton> keverendoGombok = gombokListbe();
             Collections.shuffle(keverendoGombok);
+            pinGombokTorol();
             pinPadFrissit(keverendoGombok);
+            revalidate();
         }else{
+            pinGombokTorol();
             pinPadFrissit(alapGomSorrend);
+            revalidate();
         }
     }//GEN-LAST:event_checkKeverItemStateChanged
 
@@ -380,6 +374,10 @@ public class PinPadForm extends javax.swing.JFrame {
         kilepes();
     }//GEN-LAST:event_formWindowClosing
 
+    private void pinGombokTorol(){
+        pnlPinKod.removeAll();
+    }
+    
     private void kilepes(){
         int valasz=JOptionPane.showConfirmDialog(rootPane, "Kilépsz?", "Kilépés", JOptionPane.YES_NO_OPTION);
         
@@ -388,21 +386,19 @@ public class PinPadForm extends javax.swing.JFrame {
         }
     }
     
-    private ArrayList<String> gombokSzovegeListbe(){
+    private ArrayList<JButton> gombokListbe(){
         JButton[] btns=gombTombKomponensekbol();
-        ArrayList<String> gombok = new ArrayList<String>();
+        ArrayList<JButton> gombok = new ArrayList<JButton>();
         for (int i = 0; i < btns.length; i++) {
-            gombok.add(btns[i].getText());
+            gombok.add(btns[i]);
         }
         return gombok;
     }
     
-    private void pinPadFrissit(ArrayList<String> al){
-        JButton[] btns=gombTombKomponensekbol();
-        int ind=0;
-        for (JButton btn : btns) {
-            btn.setText(al.get(ind));
-            ind++;
+    private void pinPadFrissit(ArrayList<JButton> al){
+        pinGombokTorol();
+        for (int i = 0; i < al.size(); i++) {
+            pnlPinKod.add(al.get(i));
         }
     }
     /**
@@ -438,8 +434,6 @@ public class PinPadForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox checkKever;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
@@ -449,14 +443,6 @@ public class PinPadForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JList<String> jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
